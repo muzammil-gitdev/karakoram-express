@@ -4,6 +4,7 @@ import Homepage from "../pages/Homepage"
 import AboutUs from "../pages/AboutUs"
 import Services from "../pages/Services"
 import Offices from "../pages/Offices"
+import Booking from "../pages/Booking"
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
         <Route path='aboutus' element={<AboutUs />} />
         <Route path='services' element={<Services />} />
         <Route path='offices' element={<Offices />} />
+        <Route path='booking' element={<Booking />} />
       </Routes>
     </BrowserRouter>
   )

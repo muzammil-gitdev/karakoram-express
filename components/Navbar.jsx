@@ -40,12 +40,12 @@ export default function Navbar() {
 
         {/* Book Now Button + Mobile Menu */}
         <div className='gap-md flex items-center'>
-          <a
-            href='/booking'
+          <NavLink
+            to='/booking'
             className='bg-secondary text-on-secondary text-label-md px-md hover:bg-secondary-container rounded py-2 font-bold shadow-sm transition-colors active:scale-95'
           >
             Book Now
-          </a>
+          </NavLink>
           <button className='text-primary p-1 md:hidden'>
             <span className='material-symbols-outlined'>menu</span>
           </button>
