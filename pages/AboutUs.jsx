@@ -8,7 +8,7 @@ export default function AboutUs() {
   }, [])
   return (
     <>
-      <Navbar />
+    
 
       <main className='flex flex-1 flex-col'>
         {/* ===== HERO SECTION ===== */}
@@ -266,7 +266,7 @@ export default function AboutUs() {
         </section>
       </main>
 
-      <Footer />
+     
     </>
   )
 }

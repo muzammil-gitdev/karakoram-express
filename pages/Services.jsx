@@ -71,7 +71,6 @@ export default function Services() {
   })
   return (
     <>
-      <Navbar />
       <main className='flex-1'>
         {/* ====== HERO SECTION ====== */}
         <section className='bg-background py-xl relative overflow-hidden md:py-[96px]'>
@@ -275,7 +274,6 @@ export default function Services() {
           </div>
         </section>
       </main>
-      <Footer />
     </>
   )
 }

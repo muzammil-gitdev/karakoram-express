@@ -8,7 +8,6 @@ export default function Offices() {
   })
   return (
     <>
-      <Navbar />
       <main className='flex-1'>
         {/* Header Section */}
         <section className='px-lg md:px-xl py-xl mx-auto max-w-[1280px]'>
@@ -191,7 +190,6 @@ export default function Offices() {
           </div>
         </section>
       </main>
-      <Footer />
     </>
   )
 }

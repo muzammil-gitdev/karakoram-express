@@ -9,8 +9,6 @@ function Homepage() {
   })
   return (
     <>
-      <Navbar />
-
       <main className='flex-1'>
         {/* ===== HERO SECTION ===== */}
         <section className='relative flex min-h-[600px] flex-col items-center'>
@@ -215,7 +213,6 @@ function Homepage() {
           </div>
         </section>
       </main>
-      <Footer />
     </>
   )
 }

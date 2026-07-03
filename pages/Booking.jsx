@@ -122,7 +122,6 @@ export default function Booking() {
 
   return (
     <>
-      <Navbar />
       <main className='flex-1'>
         {/* Hero Background */}
         <div className='relative h-[300px] overflow-hidden'>
@@ -815,7 +814,6 @@ export default function Booking() {
           </div>
         </div>
       </main>
-      <Footer />
     </>
   )
 }
