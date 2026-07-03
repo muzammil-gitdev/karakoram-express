@@ -12,7 +12,7 @@ export default function Offices() {
       <main className='flex-1'>
         {/* Header Section */}
         <section className='px-lg md:px-xl py-xl mx-auto max-w-[1280px]'>
-          <h1 className='text-display-lg text-primary'>Terminal Locations</h1>
+          <h1 className='text-display-lg text-primary'>Terminal Location</h1>
           <p className='text-body-lg text-on-surface-variant mt-md max-w-2xl'>
             Find our operational hubs across Northern Pakistan. Each terminal is
             strategically positioned to connect communities along the Karakoram
