@@ -8,9 +8,12 @@ function Homepage() {
 
   const fetchFeaturedRoutes = async (signal) => {
     try {
-      const res = await fetch("http://localhost:4000/api/featuredRoutes", {
-        signal,
-      });
+      const res = await fetch(
+        `${import.meta.env.VITE_BACKEND_URL}/api/featuredRoutes`,
+        {
+          signal,
+        },
+      );
       const data = await res.json();
       // console.log(data.data);
       if (data.status === "success") setFeaturedRoutesData(data.data);
