@@ -1,15 +1,13 @@
-import Navbar from "../components/Navbar"
-import Footer from "../components/Footer"
-import { useEffect } from "react"
+import Navbar from "../components/Navbar";
+import Footer from "../components/Footer";
+import { useEffect } from "react";
 
 export default function AboutUs() {
   useEffect(() => {
-    document.title = "About Us | Karakoram Express"
-  }, [])
+    document.title = "About Us | Karakoram Express";
+  }, []);
   return (
     <>
-    
-
       <main className='flex flex-1 flex-col'>
         {/* ===== HERO SECTION ===== */}
         <section className='relative h-[614px] w-full overflow-hidden'>
@@ -114,7 +112,7 @@ export default function AboutUs() {
               {/* Luxury Cruisers — large card */}
               <div className='group relative overflow-hidden rounded-2xl md:col-span-2 md:row-span-2'>
                 <img
-                  src='https://lh3.googleusercontent.com/aida-public/AB6AXuCfX4DdkKHdyoTSn1-Pt_w5am2mMIpgYr_A0XrhD5GILg7KChb0J7ZVF3lJ_ZRbfFg-Tj8MX4XldhRUhvdWgW1WHlsHPtCk1YjP9t_UhkOKBj88Xjod83B5zzAGGXmaO7aPDDxuz9fCBqFN7OkZlDh9aXnbwFprRIbc9q8DUOhyPQqHlfUl_2U5SY_FrNd7_Lz2cB7OQHnN55WlqhgTjqjeNNN56GR3R5VKi30_WzN56i8xIIl8PXj5CT0AYw6MpJTiaU8XpVhYmw49'
+                  src='./bus.png'
                   alt='Luxury cruiser bus in Karakoram mountains'
                   className='h-full w-full object-cover transition-transform duration-500 group-hover:scale-105'
                 />
@@ -136,7 +134,7 @@ export default function AboutUs() {
               {/* Executive Vans */}
               <div className='group relative overflow-hidden rounded-2xl'>
                 <img
-                  src='https://lh3.googleusercontent.com/aida-public/AB6AXuC97y1YJMmMymbIn7HzyO27NgrguqgPsRXfAYGaaWOlOK_D1lei4MeVlG8Xd4Kcg7LIjeusgJHqI-urSt_VoCO0Utzb0xYo8q9h3CETDXrESfYRKIqY4rjqurxuDKWMalXQWBfcs17KNbUYplmS2qukHVzbZUoLrBUmUGGIrcHU9ZQhaDkRhvCN7RIHoteLpNl-lmLu4bfy-DBotXik0AkfemFzgj4iGtTi-wq0k4qTliQLALr0N2xuJYRn8TZC0crXB_FsRA5ys2UM'
+                  src='./van.png'
                   alt='Executive van for mountain routes'
                   className='h-full w-full object-cover transition-transform duration-500 group-hover:scale-105'
                 />
@@ -265,8 +263,6 @@ export default function AboutUs() {
           </div>
         </section>
       </main>
-
-     
     </>
-  )
+  );
 }

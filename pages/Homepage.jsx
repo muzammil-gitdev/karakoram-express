@@ -1,12 +1,32 @@
-import { useEffect } from "react"
-import FeaturedRoutesCard from "../components/FeaturedRoutesCard"
-import Footer from "../components/Footer"
-import Navbar from "../components/Navbar"
+import { useEffect, useState } from "react";
+import FeaturedRoutesCard from "../components/FeaturedRoutesCard";
+import Footer from "../components/Footer";
+import Navbar from "../components/Navbar";
 
 function Homepage() {
+  const [featuredRoutesData, setFeaturedRoutesData] = useState([]);
+
+  const fetchFeaturedRoutes = async (signal) => {
+    try {
+      const res = await fetch("http://localhost:4000/api/featuredRoutes", {
+        signal,
+      });
+      const data = await res.json();
+      // console.log(data.data);
+      if (data.status === "success") setFeaturedRoutesData(data.data);
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+
   useEffect(() => {
-    document.title = "Karakoram Express"
-  })
+    document.title = "Karakoram Express";
+    const controller = new AbortController();
+    fetchFeaturedRoutes(controller.signal);
+    return () => {
+      controller.abort();
+    };
+  }, []);
   return (
     <>
       <main className='flex-1'>
@@ -93,58 +113,9 @@ function Homepage() {
             </h2>
 
             <div className='gap-lg grid grid-cols-1 md:grid-cols-2'>
-              {/* Route Card 1 — Rawalpindi → Skardu */}
-              <div className='p-lg group relative flex min-h-[280px] flex-col justify-end overflow-hidden rounded-2xl'>
-                <div
-                  className='absolute inset-0 bg-cover bg-center bg-no-repeat transition-transform duration-500 group-hover:scale-105'
-                  style={{
-                    backgroundImage:
-                      "url('https://lh3.googleusercontent.com/aida-public/AB6AXuApO1M0nnZtLvu28d2kuBd-xLI8-Kf89gmwxMlZKmJ0X8Hs4UhNz0fxhuxMtotBZvt00zHMIyisfM0ozUNeh1QuKf4MlA7eCJGFDKEZvlPfnHrRjl4Sh-Vx3qilTl7JTsus2mQJ2uJCMn-_4AjP3L_wEu-I2k9nawJj0UU7o8uPeLsbceng3UnxhM6OF5K0n0hB3RfCe2Rbm9akk5m6Qb6uUGFfQWSxQhLKm_8g6CvB382nudb4kHaKvKTtA_MgmD0UgRJ5-NkiNY9A')",
-                  }}
-                />
-                <div className='absolute inset-0 bg-linear-to-t from-black/80 via-black/40 to-transparent' />
-                <div className='relative z-10'>
-                  <h3 className='text-headline-lg-mobile text-on-primary mb-1'>
-                    Rawalpindi &harr; Skardu
-                  </h3>
-                  <div className='gap-md text-on-primary/80 flex items-center'>
-                    <span className='text-label-md gap-xs flex items-center'>
-                      <span className='material-symbols-outlined text-[18px]'>
-                        schedule
-                      </span>
-                      18 hrs
-                    </span>
-                    <span className='text-label-md'>Rs. 8,500</span>
-                  </div>
-                </div>
-              </div>
-              <FeaturedRoutesCard />
-
-              {/* Route Card 2 — Skardu → Gilgit */}
-              <div className='p-lg group relative flex min-h-[280px] flex-col justify-end overflow-hidden rounded-2xl'>
-                <div
-                  className='absolute inset-0 bg-cover bg-center bg-no-repeat transition-transform duration-500 group-hover:scale-105'
-                  style={{
-                    backgroundImage:
-                      "url('https://lh3.googleusercontent.com/aida-public/AB6AXuCuegeugQC1PQJP_8nkqVe7rg-KVGYfBFOhFFj0UiGOHqfDn1WQmJyPFpWVZ7BeOToWYqpirSplxrslqTUGke0ntaq0tR-3iST8QPF_YHfto_YPNrDEg8GCXwBi9W0-22M3vknjIYRe51aC_xuvGVsZXVJ7uT9MtxQdREdMr67Fl_vYo23UWl2MxezVbuZ2EpEj2HEmmvKc4uYPmLiRyJ_ez8pyUCuPtw2KmsDzsdyrzfN6cigS-_FW9ebFloWAPLa3sj_eqqxgd8Qs')",
-                  }}
-                />
-                <div className='absolute inset-0 bg-linear-to-t from-black via-black/40 to-transparent' />
-                <div className='relative z-10'>
-                  <h3 className='text-headline-lg-mobile text-on-primary mb-1'>
-                    Skardu &harr; Gilgit
-                  </h3>
-                  <div className='gap-md text-on-primary/80 flex items-center'>
-                    <span className='text-label-md gap-xs flex items-center'>
-                      <span className='material-symbols-outlined text-[18px]'>
-                        schedule
-                      </span>
-                      5 hrs
-                    </span>
-                    <span className='text-label-md'>Rs. 3,200</span>
-                  </div>
-                </div>
-              </div>
+              {featuredRoutesData.map((cur, index) => {
+                return <FeaturedRoutesCard key={index} value={cur} />;
+              })}
             </div>
           </div>
         </section>
@@ -214,7 +185,7 @@ function Homepage() {
         </section>
       </main>
     </>
-  )
+  );
 }
 
-export default Homepage
+export default Homepage;

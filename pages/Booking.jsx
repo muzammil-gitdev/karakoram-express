@@ -292,26 +292,14 @@ export default function Booking() {
                     <label className='text-label-md text-on-surface-variant mb-3 block'>
                       Travel Date
                     </label>
-                    <div id='date-pills' className='gap-sm flex flex-wrap'>
-                      {DATE_PILLS.map((pill) => (
-                        <button
-                          key={pill}
-                          id={`date-pill-${pill.toLowerCase()}`}
-                          onClick={() => setSelectedDate(pill)}
-                          className={`text-label-md cursor-pointer rounded-full px-5 py-2.5 font-semibold transition-all duration-200 ${
-                            selectedDate === pill
-                              ? "bg-primary text-on-primary shadow-md"
-                              : "bg-surface-container-low text-on-surface-variant border-outline-variant hover:bg-surface-variant border"
-                          }`}
-                        >
-                          {pill === "More" && (
-                            <span className='material-symbols-outlined mr-1 align-middle text-[16px]'>
-                              calendar_month
-                            </span>
-                          )}
-                          {pill}
-                        </button>
-                      ))}
+                    <div className='w-full flex-1'>
+                      <label className='text-label-sm text-on-surface-variant mb-1 block text-left tracking-wider uppercase'>
+                        Date
+                      </label>
+                      <input
+                        type='date'
+                        className='px-md border-outline-variant bg-surface-container-low text-on-surface text-body-md focus:border-primary h-12 w-full rounded-lg border focus:outline-none'
+                      />
                     </div>
                   </div>
 
