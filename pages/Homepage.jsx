@@ -17,14 +17,11 @@ function Homepage() {
         },
       );
       const data = await res.json();
-      console.log(data.data);
       if (data.status === "success") setFeaturedRoutesData(data.data);
     } catch (error) {
       console.log(error.message);
     } finally {
-      setTimeout(() => {
-        setLoading(false);
-      }, 3000);
+      setLoading(false);
     }
   };
 
