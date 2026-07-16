@@ -5,8 +5,10 @@ import Navbar from "../components/Navbar";
 
 function Homepage() {
   const [featuredRoutesData, setFeaturedRoutesData] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   const fetchFeaturedRoutes = async (signal) => {
+    setLoading(true);
     try {
       const res = await fetch(
         `${import.meta.env.VITE_BACKEND_URL}/api/featuredRoutes`,
@@ -15,10 +17,14 @@ function Homepage() {
         },
       );
       const data = await res.json();
-      // console.log(data.data);
+      console.log(data.data);
       if (data.status === "success") setFeaturedRoutesData(data.data);
     } catch (error) {
       console.log(error.message);
+    } finally {
+      setTimeout(() => {
+        setLoading(false);
+      }, 3000);
     }
   };
 
@@ -116,9 +122,15 @@ function Homepage() {
             </h2>
 
             <div className='gap-lg grid grid-cols-1 md:grid-cols-2'>
-              {featuredRoutesData.map((cur, index) => {
-                return <FeaturedRoutesCard key={index} value={cur} />;
-              })}
+              {loading ? (
+                <h1>Loading </h1>
+              ) : featuredRoutesData.length === 0 ? (
+                <h1>No Routes Found</h1>
+              ) : (
+                featuredRoutesData.map((cur, index) => {
+                  return <FeaturedRoutesCard key={cur._id} value={cur} />;
+                })
+              )}
             </div>
           </div>
         </section>
