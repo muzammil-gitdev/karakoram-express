@@ -1,11 +1,11 @@
-import { NavLink } from "react-router-dom"
+import { NavLink } from "react-router-dom";
 
 const navLinks = [
   { href: "/", label: "Home" },
   { href: "/aboutus", label: "About Us" },
   { href: "/services", label: "Services" },
   { href: "/offices", label: "Offices" },
-]
+];
 
 export default function Navbar() {
   return (
@@ -16,7 +16,7 @@ export default function Navbar() {
           href='/'
           className='text-headline-lg-mobile md:text-headline-lg text-primary font-extrabold tracking-tight transition-opacity hover:opacity-80'
         >
-          Karakoram Express
+          GB Chalo
         </a>
 
         {/* Desktop Navigation */}
@@ -34,7 +34,7 @@ export default function Navbar() {
               >
                 {link.label}
               </NavLink>
-            )
+            );
           })}
         </div>
 
@@ -52,5 +52,5 @@ export default function Navbar() {
         </div>
       </div>
     </nav>
-  )
+  );
 }

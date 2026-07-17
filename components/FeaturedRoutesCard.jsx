@@ -1,7 +1,7 @@
 function FeaturedRoutesCard({ value }) {
   const { from, to, price, image } = value;
   return (
-    <div className='p-lg group relative flex min-h-[280px] flex-col justify-end overflow-hidden rounded-2xl'>
+    <div className='p-lg group relative flex min-h-70 flex-col justify-end overflow-hidden rounded-2xl'>
       <div
         className='absolute inset-0 bg-cover bg-center bg-no-repeat transition-transform duration-500 group-hover:scale-105'
         style={{
