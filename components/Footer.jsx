@@ -48,12 +48,21 @@ export default function Footer() {
           </div>
         </div>
 
-        {/* Copyright */}
-        <div className='border-outline-variant/20 col-span-1 mt-8 border-t pt-8 text-center md:col-span-4 md:text-left'>
+        {/* Copyright + Portal Link */}
+        <div className='border-outline-variant/20 col-span-1 mt-8 flex flex-col items-center justify-between gap-4 border-t pt-8 md:col-span-4 md:flex-row'>
           <p className='text-body-md text-surface-variant'>
             © 2024 Karakoram Express. Precision transit across Northern
             Pakistan.
           </p>
+          <a
+            href='/portal'
+            className='text-label-sm text-surface-variant/60 hover:text-secondary-fixed-dim flex items-center gap-1.5 transition-colors'
+          >
+            <span className='material-symbols-outlined text-[16px]'>
+              admin_panel_settings
+            </span>
+            Management Portal
+          </a>
         </div>
       </div>
     </footer>

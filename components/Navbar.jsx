@@ -16,7 +16,7 @@ export default function Navbar() {
           href='/'
           className='text-headline-lg-mobile md:text-headline-lg text-primary font-extrabold tracking-tight transition-opacity hover:opacity-80'
         >
-          GB Chalo
+          Karakoram Express
         </a>
 
         {/* Desktop Navigation */}

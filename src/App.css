@@ -240,3 +240,44 @@ body {
   background-color: var(--color-secondary-fixed);
   color: var(--color-on-secondary-fixed);
 }
+
+/* === PORTAL STYLES === */
+
+/* Sidebar scrollbar */
+.portal-sidebar::-webkit-scrollbar {
+  width: 4px;
+}
+
+.portal-sidebar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.portal-sidebar::-webkit-scrollbar-thumb {
+  background-color: rgba(255, 255, 255, 0.15);
+  border-radius: 2px;
+}
+
+/* Toast animation */
+.portal-toast {
+  animation: portal-toast-in 0.35s cubic-bezier(0.21, 1.02, 0.73, 1) forwards;
+}
+
+@keyframes portal-toast-in {
+  from {
+    opacity: 0;
+    transform: translateY(-16px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Data table */
+.portal-table th {
+  white-space: nowrap;
+}
+
+.portal-table td {
+  white-space: nowrap;
+}
