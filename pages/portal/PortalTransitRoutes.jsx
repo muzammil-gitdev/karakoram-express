@@ -355,6 +355,7 @@ export default function PortalTransitRoutes() {
       {/* Edit Route Panel */}
       {editingRoute && (
         <EditTransitRoute
+          key={editingRoute._id}
           route={editingRoute}
           onCancel={() => setEditingRoute(null)}
           onUpdated={handleEditSuccess}

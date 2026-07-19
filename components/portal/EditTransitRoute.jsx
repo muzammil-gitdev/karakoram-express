@@ -72,6 +72,7 @@ export default function EditTransitRoute({ route, onCancel, onUpdated, backendUr
 
     setSubmitting(true);
     const payload = {
+      id: route._id,
       from: form.from,
       to: form.to,
       departure: form.departure,
@@ -82,10 +83,12 @@ export default function EditTransitRoute({ route, onCancel, onUpdated, backendUr
     };
     console.log("Update Transit Route Data:", payload);
     try {
-      const res = await fetch(`${backendUrl}/api/transit/${route._id}`, {
+      // const res = await fetch(`${backendUrl}/api/transit/${route._id}`, {
+      const res = await fetch(`${backendUrl}/api/transit`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
+          id: route._id,
           from: form.from,
           to: form.to,
           departure: form.departure,
@@ -260,13 +263,12 @@ export default function EditTransitRoute({ route, onCancel, onUpdated, backendUr
                   onClick={() => !isOriginallyBooked && toggleSeat(seat)}
                   disabled={isOriginallyBooked}
                   title={`Seat ${seat} — ${isOriginallyBooked ? "Already Booked (locked)" : isBooked ? "Booked" : "Available"}`}
-                  className={`flex h-9 w-full items-center justify-center rounded-lg text-xs font-bold transition-all ${
-                    isOriginallyBooked
-                      ? "bg-on-surface/15 text-on-surface/40 cursor-not-allowed ring-1 ring-on-surface/10"
-                      : isBooked
-                        ? "bg-primary text-on-primary shadow-md ring-2 ring-primary/30 cursor-pointer active:scale-95"
-                        : "bg-surface-container-low text-on-surface-variant hover:bg-primary-container hover:text-on-primary-container border-outline-variant/30 border cursor-pointer active:scale-95"
-                  }`}
+                  className={`flex h-9 w-full items-center justify-center rounded-lg text-xs font-bold transition-all ${isOriginallyBooked
+                    ? "bg-on-surface/15 text-on-surface/40 cursor-not-allowed ring-1 ring-on-surface/10"
+                    : isBooked
+                      ? "bg-primary text-on-primary shadow-md ring-2 ring-primary/30 cursor-pointer active:scale-95"
+                      : "bg-surface-container-low text-on-surface-variant hover:bg-primary-container hover:text-on-primary-container border-outline-variant/30 border cursor-pointer active:scale-95"
+                    }`}
                 >
                   {isOriginallyBooked && (
                     <span className='material-symbols-outlined mr-0.5 text-[12px]'>lock</span>
