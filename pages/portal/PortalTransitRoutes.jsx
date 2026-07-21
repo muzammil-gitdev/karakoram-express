@@ -420,8 +420,8 @@ export default function PortalTransitRoutes() {
                   <tr
                     key={route._id || idx}
                     className={`border-outline-variant/20 hover:bg-primary-fixed/5 border-b transition-colors last:border-b-0 ${idx % 2 === 0
-                        ? "bg-surface-container-lowest"
-                        : "bg-surface-container-low/40"
+                      ? "bg-surface-container-lowest"
+                      : "bg-surface-container-low/40"
                       }`}
                   >
                     <td className='px-5 py-3.5'>

@@ -71,24 +71,11 @@ export default function EditTransitRoute({ route, onCancel, onUpdated, backendUr
     }
 
     setSubmitting(true);
-    const payload = {
-      id: route._id,
-      from: form.from,
-      to: form.to,
-      departure: form.departure,
-      arrival: form.arrival,
-      vehicleNumber: form.vehicleNumber,
-      ticketPrice: Number(form.ticketPrice),
-      bookedSeats: bookedSeats,
-    };
-    console.log("Update Transit Route Data:", payload);
     try {
-      // const res = await fetch(`${backendUrl}/api/transit/${route._id}`, {
-      const res = await fetch(`${backendUrl}/api/transit`, {
+      const res = await fetch(`${backendUrl}/api/transit/${route._id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          id: route._id,
           from: form.from,
           to: form.to,
           departure: form.departure,
