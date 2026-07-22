@@ -8,6 +8,7 @@ const footerLinks = [
 ]
 
 export default function Footer() {
+
   return (
     <footer className='bg-primary mt-auto w-full'>
       <div className='gap-xl px-lg md:px-xl py-xl text-on-primary mx-auto grid max-w-[1280px] grid-cols-1 md:grid-cols-4'>

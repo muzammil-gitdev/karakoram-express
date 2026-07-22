@@ -37,7 +37,7 @@ export default function PortalTransitRoutes() {
   const fetchRoutes = async (signal) => {
     setLoading(true);
     try {
-      const res = await fetch(`${BACKEND}/api/transit`, { signal });
+      const res = await fetch(`${BACKEND}/api/transit/all`, { signal });
       const data = await res.json();
       console.log(data)
       if (data.success) setRoutes(data.data);

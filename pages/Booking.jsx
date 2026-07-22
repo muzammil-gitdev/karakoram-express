@@ -1,6 +1,7 @@
 import { useState } from "react"
 import Navbar from "../components/Navbar"
 import Footer from "../components/Footer"
+import PortalToast from "../components/portal/PortalToast"
 
 const STEPS = [
   { id: 1, label: "Route" },
@@ -76,8 +77,26 @@ export default function Booking() {
     setDestination(origin)
   }
 
-  const handleFindBuses = () => {
-    setCurrentStep(2)
+  const handleFindBuses = async () => {
+    try {
+      const startOfDay = new Date(selectedDate);
+      startOfDay.setUTCHours(0, 0, 0, 0);
+      const endOfDay = new Date(selectedDate);
+      endOfDay.setUTCHours(23, 59, 59, 999);
+      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/transit?from=${origin}&to=${destination}&start=${startOfDay.toISOString()}&end=${endOfDay.toISOString()}`);
+      const data = await response.json()
+      console.log(data)
+      if (!data.success) throw new Error("Something went wrong")
+      if (data.data.length === 0) {
+        throw new Error("No buses available for the selected route and date")
+      }
+      setCurrentStep(2)
+    } catch (error) {
+      <PortalToast message={error.message} type="error" onClose={() => setCurrentStep(1)} />
+    }
+
+
+
   }
 
   const handleSelectBus = (bus) => {
@@ -161,18 +180,16 @@ export default function Booking() {
                 <button
                   id={`step-${step.id}`}
                   onClick={() => handleStepClick(step.id)}
-                  className={`flex cursor-pointer items-center gap-2 transition-all duration-200 ${
-                    step.id <= currentStep ? "opacity-100" : "opacity-50"
-                  }`}
+                  className={`flex cursor-pointer items-center gap-2 transition-all duration-200 ${step.id <= currentStep ? "opacity-100" : "opacity-50"
+                    }`}
                 >
                   <span
-                    className={`text-label-md flex h-9 w-9 items-center justify-center rounded-full font-bold transition-colors duration-200 ${
-                      step.id === currentStep
-                        ? "bg-primary text-on-primary"
-                        : step.id < currentStep
-                          ? "bg-primary-container text-on-primary-container"
-                          : "bg-surface-variant border-outline-variant text-on-surface-variant border-2"
-                    }`}
+                    className={`text-label-md flex h-9 w-9 items-center justify-center rounded-full font-bold transition-colors duration-200 ${step.id === currentStep
+                      ? "bg-primary text-on-primary"
+                      : step.id < currentStep
+                        ? "bg-primary-container text-on-primary-container"
+                        : "bg-surface-variant border-outline-variant text-on-surface-variant border-2"
+                      }`}
                   >
                     {step.id < currentStep ? (
                       <span className='material-symbols-outlined text-[18px]'>
@@ -183,22 +200,20 @@ export default function Booking() {
                     )}
                   </span>
                   <span
-                    className={`text-label-md hidden md:inline ${
-                      step.id === currentStep
-                        ? "text-primary font-bold"
-                        : "text-on-surface-variant"
-                    }`}
+                    className={`text-label-md hidden md:inline ${step.id === currentStep
+                      ? "text-primary font-bold"
+                      : "text-on-surface-variant"
+                      }`}
                   >
                     {step.label}
                   </span>
                 </button>
                 {index < STEPS.length - 1 && (
                   <div
-                    className={`h-0.5 w-8 transition-colors duration-200 md:w-16 ${
-                      step.id < currentStep
-                        ? "bg-primary-container"
-                        : "bg-outline-variant"
-                    }`}
+                    className={`h-0.5 w-8 transition-colors duration-200 md:w-16 ${step.id < currentStep
+                      ? "bg-primary-container"
+                      : "bg-outline-variant"
+                      }`}
                   />
                 )}
               </div>
@@ -299,6 +314,7 @@ export default function Booking() {
                       <input
                         type='date'
                         className='px-md border-outline-variant bg-surface-container-low text-on-surface text-body-md focus:border-primary h-12 w-full rounded-lg border focus:outline-none'
+                        onChange={(e) => { setSelectedDate(e.target.value) }}
                       />
                     </div>
                   </div>
@@ -456,15 +472,13 @@ export default function Booking() {
                             id={seat.id}
                             onClick={() => handleSeatClick(index)}
                             disabled={seat.status === "booked"}
-                            className={`text-label-md relative flex aspect-square w-full cursor-pointer items-center justify-center rounded-lg font-bold transition-all duration-200 ${
-                              col === 1 ? "mr-4" : ""
-                            } ${
-                              seat.status === "available"
+                            className={`text-label-md relative flex aspect-square w-full cursor-pointer items-center justify-center rounded-lg font-bold transition-all duration-200 ${col === 1 ? "mr-4" : ""
+                              } ${seat.status === "available"
                                 ? "bg-surface-container-low border-outline-variant text-on-surface-variant hover:border-primary hover:bg-primary-fixed/20 border-2"
                                 : seat.status === "selected"
                                   ? "bg-primary-container text-on-primary-container border-primary scale-105 border-2 shadow-md"
                                   : "bg-surface-variant text-on-surface-variant cursor-not-allowed opacity-50"
-                            }`}
+                              }`}
                           >
                             {seat.number}
                             {seat.status === "booked" && (
@@ -489,11 +503,10 @@ export default function Booking() {
                       id='proceed-to-details-btn'
                       onClick={handleProceedToDetails}
                       disabled={selectedSeats.length === 0}
-                      className={`text-label-md px-lg flex cursor-pointer items-center gap-2 rounded-xl py-2.5 font-bold transition-all ${
-                        selectedSeats.length > 0
-                          ? "bg-secondary text-on-secondary hover:bg-secondary-container shadow-sm active:scale-[0.98]"
-                          : "bg-surface-variant text-on-surface-variant cursor-not-allowed opacity-60"
-                      }`}
+                      className={`text-label-md px-lg flex cursor-pointer items-center gap-2 rounded-xl py-2.5 font-bold transition-all ${selectedSeats.length > 0
+                        ? "bg-secondary text-on-secondary hover:bg-secondary-container shadow-sm active:scale-[0.98]"
+                        : "bg-surface-variant text-on-surface-variant cursor-not-allowed opacity-60"
+                        }`}
                     >
                       Continue
                       <span className='material-symbols-outlined text-[20px]'>
@@ -592,11 +605,10 @@ export default function Booking() {
                     disabled={
                       !passengerName || !passengerPhone || !passengerEmail
                     }
-                    className={`mt-xl text-label-md flex w-full cursor-pointer items-center justify-center gap-2 rounded-xl py-3.5 font-bold transition-all ${
-                      passengerName && passengerPhone && passengerEmail
-                        ? "bg-secondary text-on-secondary hover:bg-secondary-container shadow-md active:scale-[0.98]"
-                        : "bg-surface-variant text-on-surface-variant cursor-not-allowed opacity-60"
-                    }`}
+                    className={`mt-xl text-label-md flex w-full cursor-pointer items-center justify-center gap-2 rounded-xl py-3.5 font-bold transition-all ${passengerName && passengerPhone && passengerEmail
+                      ? "bg-secondary text-on-secondary hover:bg-secondary-container shadow-md active:scale-[0.98]"
+                      : "bg-surface-variant text-on-surface-variant cursor-not-allowed opacity-60"
+                      }`}
                   >
                     <span className='material-symbols-outlined text-[20px]'>
                       check_circle
