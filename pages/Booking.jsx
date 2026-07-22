@@ -61,6 +61,7 @@ const generateSeatMap = () => {
 
 export default function Booking() {
   const [currentStep, setCurrentStep] = useState(1)
+  const [busData, setBusData] = useState([]);
   const [origin, setOrigin] = useState("Rawalpindi")
   const [destination, setDestination] = useState("Skardu")
   const [selectedDate, setSelectedDate] = useState("Today")
@@ -70,7 +71,8 @@ export default function Booking() {
   const [passengerName, setPassengerName] = useState("")
   const [passengerPhone, setPassengerPhone] = useState("")
   const [passengerEmail, setPassengerEmail] = useState("")
-  const [bookingConfirmed, setBookingConfirmed] = useState(false)
+  const [bookingConfirmed, setBookingConfirmed] = useState(false);
+  const [loadingBus, setLoadingBus] = useState(false);
 
   const handleSwap = () => {
     setOrigin(destination)
@@ -79,23 +81,25 @@ export default function Booking() {
 
   const handleFindBuses = async () => {
     try {
+      setLoadingBus(true);
       const startOfDay = new Date(selectedDate);
       startOfDay.setUTCHours(0, 0, 0, 0);
       const endOfDay = new Date(selectedDate);
       endOfDay.setUTCHours(23, 59, 59, 999);
       const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/transit?from=${origin}&to=${destination}&start=${startOfDay.toISOString()}&end=${endOfDay.toISOString()}`);
-      const data = await response.json()
-      console.log(data)
-      if (!data.success) throw new Error("Something went wrong")
-      if (data.data.length === 0) {
+      const payload = await response.json()
+      setBusData(payload.data);
+      console.log(busData)
+      if (!payload.success) throw new Error("Something went wrong")
+      if (payload.data.length === 0) {
         throw new Error("No buses available for the selected route and date")
       }
       setCurrentStep(2)
     } catch (error) {
-      <PortalToast message={error.message} type="error" onClose={() => setCurrentStep(1)} />
+      alert(error.message)
+    } finally {
+      setLoadingBus(false);
     }
-
-
 
   }
 
@@ -322,10 +326,12 @@ export default function Booking() {
                   {/* Find Buses Button */}
                   <button
                     id='find-buses-btn'
+                    disabled={loadingBus}
                     onClick={handleFindBuses}
-                    className='bg-secondary text-on-secondary text-label-md px-lg hover:bg-secondary-container flex w-full cursor-pointer items-center justify-center gap-2 rounded-xl py-3 font-bold shadow-md transition-colors active:scale-[0.98] md:w-auto'
+                    className={`bg-secondary text-on-secondary text-label-md px-lg hover:bg-secondary-container flex w-full cursor-pointer items-center justify-center gap-2 rounded-xl py-3 font-bold shadow-md transition-colors active:scale-[0.98] md:w-auto ${loadingBus ? "opacity-50" : ""
+                      }`}
                   >
-                    Find Buses
+                    {loadingBus ? "Loading..." : "Find Buses"}
                     <span className='material-symbols-outlined text-[20px]'>
                       arrow_forward
                     </span>
@@ -345,10 +351,10 @@ export default function Booking() {
                     </span>
                   </div>
 
-                  {MOCK_BUSES.map((bus) => (
+                  {busData?.map((bus) => (
                     <div
-                      key={bus.id}
-                      id={bus.id}
+                      key={bus._id}
+                      id={bus._id}
                       className='bg-surface-container-lowest card-shadow p-lg gap-md flex flex-col rounded-xl transition-shadow hover:shadow-lg md:flex-row md:items-center'
                     >
                       {/* Time & Route */}
@@ -359,16 +365,16 @@ export default function Booking() {
                           </span>
                           <div>
                             <h3 className='text-body-lg text-on-surface font-bold'>
-                              {bus.name}
+                              {bus.vehicleNumber}
                             </h3>
                             <p className='text-label-sm text-on-surface-variant'>
-                              {bus.busClass} Class
+                              Executive Class
                             </p>
                           </div>
                         </div>
                         <div className='text-body-md text-on-surface-variant mt-2 flex items-center gap-4'>
                           <span className='text-on-surface font-semibold'>
-                            {bus.departure}
+                            {new Date(bus.departure).toLocaleTimeString()}
                           </span>
                           <div className='flex items-center gap-1'>
                             <div className='bg-primary h-2 w-2 rounded-full' />
@@ -380,7 +386,7 @@ export default function Booking() {
                             <div className='bg-secondary h-2 w-2 rounded-full' />
                           </div>
                           <span className='text-on-surface font-semibold'>
-                            {bus.arrival}
+                            {new Date(bus.arrival).toLocaleTimeString()}
                           </span>
                         </div>
                       </div>
@@ -389,10 +395,10 @@ export default function Booking() {
                       <div className='gap-lg flex items-center md:flex-col md:items-end'>
                         <div className='text-right'>
                           <p className='text-headline-lg text-primary font-bold'>
-                            Rs. {bus.price.toLocaleString()}
+                            Rs. {bus.ticketPrice}
                           </p>
                           <p className='text-label-sm text-on-surface-variant'>
-                            {bus.seats} seats left
+                            {bus.totalSeats - bus.bookedSeats.length} seats left
                           </p>
                         </div>
                         <button
