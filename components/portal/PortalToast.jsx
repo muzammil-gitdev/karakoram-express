@@ -11,8 +11,8 @@ export default function PortalToast({ message, type = "success", onClose }) {
   return (
     <div
       className={`portal-toast fixed top-6 right-6 z-[100] flex items-center gap-3 rounded-xl px-5 py-3.5 shadow-lg ${type === "success"
-          ? "bg-primary-container text-on-primary-container"
-          : "bg-error-container text-on-error-container"
+        ? "bg-primary-container text-on-primary-container"
+        : "bg-error-container text-on-error-container"
         }`}
     >
       <span className='material-symbols-outlined text-[22px]'>

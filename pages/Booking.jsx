@@ -51,11 +51,10 @@ const MOCK_BUSES = [
 // Generate initial seat map: 8 rows x 4 cols
 // 'available', 'booked', or 'selected'
 const generateSeatMap = () => {
-  const bookedSeats = [2, 5, 9, 14, 19, 22, 27] // pre-booked seat indices
   return Array.from({ length: 32 }, (_, i) => ({
     id: `seat-${i + 1}`,
     number: i + 1,
-    status: bookedSeats.includes(i) ? "booked" : "available",
+    status: 'available'
   }))
 }
 
@@ -73,6 +72,7 @@ export default function Booking() {
   const [passengerEmail, setPassengerEmail] = useState("")
   const [bookingConfirmed, setBookingConfirmed] = useState(false);
   const [loadingBus, setLoadingBus] = useState(false);
+  const [toast, setToast] = useState(null);
 
   const handleSwap = () => {
     setOrigin(destination)
@@ -89,14 +89,14 @@ export default function Booking() {
       const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/transit?from=${origin}&to=${destination}&start=${startOfDay.toISOString()}&end=${endOfDay.toISOString()}`);
       const payload = await response.json()
       setBusData(payload.data);
-      console.log(busData)
+      // console.log(busData)
       if (!payload.success) throw new Error("Something went wrong")
       if (payload.data.length === 0) {
         throw new Error("No buses available for the selected route and date")
       }
       setCurrentStep(2)
     } catch (error) {
-      alert(error.message)
+      setToast({ message: error.message, type: "error" });
     } finally {
       setLoadingBus(false);
     }
@@ -147,6 +147,7 @@ export default function Booking() {
     <>
       <main className='flex-1'>
         {/* Hero Background */}
+        {toast && <PortalToast message={toast.message} type={toast.type} onClose={() => setToast(null)} />}
         <div className='relative h-[300px] overflow-hidden'>
           <div
             className='absolute inset-0 bg-cover bg-center opacity-20'
@@ -424,7 +425,7 @@ export default function Booking() {
                     Select Your Seats
                   </h2>
                   <p className='text-body-md text-on-surface-variant mb-lg'>
-                    {selectedBus?.name} · {origin} → {destination}
+                    {selectedBus?.vehicleNumber} · {origin} → {destination}
                   </p>
 
                   {/* Legend */}
@@ -477,17 +478,17 @@ export default function Booking() {
                             key={seat.id}
                             id={seat.id}
                             onClick={() => handleSeatClick(index)}
-                            disabled={seat.status === "booked"}
+                            disabled={selectedBus.bookedSeats.includes(seat.number)}
                             className={`text-label-md relative flex aspect-square w-full cursor-pointer items-center justify-center rounded-lg font-bold transition-all duration-200 ${col === 1 ? "mr-4" : ""
-                              } ${seat.status === "available"
+                              } ${!selectedBus.bookedSeats.includes(seat.number)
                                 ? "bg-surface-container-low border-outline-variant text-on-surface-variant hover:border-primary hover:bg-primary-fixed/20 border-2"
-                                : seat.status === "selected"
+                                : seat.status === 'booked'
                                   ? "bg-primary-container text-on-primary-container border-primary scale-105 border-2 shadow-md"
                                   : "bg-surface-variant text-on-surface-variant cursor-not-allowed opacity-50"
                               }`}
                           >
                             {seat.number}
-                            {seat.status === "booked" && (
+                            {selectedBus.bookedSeats.includes(seat.number) && seat.status === "booked" && (
                               <span className='material-symbols-outlined text-on-surface-variant/50 absolute text-[14px]'>
                                 close
                               </span>
@@ -767,13 +768,13 @@ export default function Booking() {
                           <div className='flex items-center justify-between'>
                             <span className='text-body-md text-on-surface-variant'>
                               {selectedSeats.length > 0
-                                ? `${selectedSeats.length} × Rs. ${selectedBus.price.toLocaleString()}`
+                                ? `${selectedSeats.length} × Rs. ${selectedBus.ticketPrice.toLocaleString()}`
                                 : "Per seat"}
                             </span>
                             <span className='text-headline-lg text-primary font-bold'>
                               {selectedSeats.length > 0
-                                ? `Rs. ${totalPrice.toLocaleString()}`
-                                : `Rs. ${selectedBus.price.toLocaleString()}`}
+                                ? `Rs. ${selectedSeats.length * selectedBus.ticketPrice}`
+                                : `Rs. ${selectedBus.ticketPrice}`}
                             </span>
                           </div>
                         </div>

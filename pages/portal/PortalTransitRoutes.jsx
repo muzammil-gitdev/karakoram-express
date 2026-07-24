@@ -39,7 +39,7 @@ export default function PortalTransitRoutes() {
     try {
       const res = await fetch(`${BACKEND}/api/transit/all`, { signal });
       const data = await res.json();
-      console.log(data)
+      // console.log(data)
       if (data.success) setRoutes(data.data);
     } catch (err) {
       if (err.name !== "AbortError") console.log(err.message);
