@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import Navbar from "../components/Navbar"
 import Footer from "../components/Footer"
 import PortalToast from "../components/portal/PortalToast"
@@ -50,14 +50,14 @@ const MOCK_BUSES = [
 
 // Generate initial seat map: 8 rows x 4 cols
 // 'available', 'booked', or 'selected'
+
 const generateSeatMap = () => {
   return Array.from({ length: 32 }, (_, i) => ({
     id: `seat-${i + 1}`,
     number: i + 1,
-    status: 'available'
+    status: "available"
   }))
 }
-
 export default function Booking() {
   const [currentStep, setCurrentStep] = useState(1)
   const [busData, setBusData] = useState([]);
@@ -73,6 +73,7 @@ export default function Booking() {
   const [bookingConfirmed, setBookingConfirmed] = useState(false);
   const [loadingBus, setLoadingBus] = useState(false);
   const [toast, setToast] = useState(null);
+
 
   const handleSwap = () => {
     setOrigin(destination)
@@ -110,9 +111,11 @@ export default function Booking() {
 
   const handleSeatClick = (seatIndex) => {
     const seat = seats[seatIndex]
-    if (seat.status === "booked") return
+    // console.log(seat)
 
     const updatedSeats = [...seats]
+    console.log(updatedSeats)
+    console.log(seats);
     if (seat.status === "available") {
       updatedSeats[seatIndex] = { ...seat, status: "selected" }
       setSelectedSeats([...selectedSeats, seat.number])
@@ -472,6 +475,7 @@ export default function Booking() {
                     >
                       {seats.map((seat, index) => {
                         // Add aisle gap after 2nd column
+                        console.log(seat.status + (index + 1))
                         const col = index % 4
                         return (
                           <button
@@ -480,9 +484,9 @@ export default function Booking() {
                             onClick={() => handleSeatClick(index)}
                             disabled={selectedBus.bookedSeats.includes(seat.number)}
                             className={`text-label-md relative flex aspect-square w-full cursor-pointer items-center justify-center rounded-lg font-bold transition-all duration-200 ${col === 1 ? "mr-4" : ""
-                              } ${!selectedBus.bookedSeats.includes(seat.number)
+                              } ${!selectedBus.bookedSeats.includes(seat.number) && seat.status === "available"
                                 ? "bg-surface-container-low border-outline-variant text-on-surface-variant hover:border-primary hover:bg-primary-fixed/20 border-2"
-                                : seat.status === 'booked'
+                                : seat.status === 'selected'
                                   ? "bg-primary-container text-on-primary-container border-primary scale-105 border-2 shadow-md"
                                   : "bg-surface-variant text-on-surface-variant cursor-not-allowed opacity-50"
                               }`}
