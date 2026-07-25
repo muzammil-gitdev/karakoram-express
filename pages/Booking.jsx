@@ -70,6 +70,7 @@ export default function Booking() {
   const [passengerName, setPassengerName] = useState("")
   const [passengerPhone, setPassengerPhone] = useState("")
   const [passengerEmail, setPassengerEmail] = useState("")
+  const [passengerCnic, setPassengerCnic] = useState("")
   const [bookingConfirmed, setBookingConfirmed] = useState(false);
   const [loadingBus, setLoadingBus] = useState(false);
   const [toast, setToast] = useState(null);
@@ -111,11 +112,8 @@ export default function Booking() {
 
   const handleSeatClick = (seatIndex) => {
     const seat = seats[seatIndex]
-    // console.log(seat)
 
     const updatedSeats = [...seats]
-    console.log(updatedSeats)
-    console.log(seats);
     if (seat.status === "available") {
       updatedSeats[seatIndex] = { ...seat, status: "selected" }
       setSelectedSeats([...selectedSeats, seat.number])
@@ -132,10 +130,61 @@ export default function Booking() {
     }
   }
 
-  const handleConfirmBooking = () => {
-    if (passengerName && passengerPhone && passengerEmail) {
-      setBookingConfirmed(true)
+  const handleConfirmBooking = async () => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!passengerName) {
+      setToast({ message: "Please enter your name", type: "error" });
+      return
     }
+    if (!passengerPhone || passengerPhone.length !== 11) {
+      setToast({ message: "Enter Correct Mobile Number", type: "error" });
+      return
+    }
+    if (!passengerEmail || !emailRegex.test(passengerEmail)) {
+      setToast({ message: "Please enter your valid email", type: "error" });
+      return
+    }
+    if (!passengerCnic || passengerCnic.length !== 13) {
+      setToast({ message: "Please enter your CNIC", type: "error" });
+      return
+    }
+
+    // console.log("name = " + passengerName)
+    // console.log("cnic = " + passengerCnic)
+    // console.log("phoneNo = " + passengerPhone)
+    // console.log("vehicleNo = " + selectedBus.vehicleNumber)
+    // console.log("transitDat = " + selectedBus.departure)
+    // console.log("ticketPrice = " + selectedBus.ticketPrice)
+    // console.log("to = " + selectedBus.to)
+    // console.log("from = " + selectedBus.from)
+    // console.log("noOfSeats = " + selectedSeats.length)
+    // console.log("Total Amount = ", (selectedSeats.length * selectedBus.ticketPrice))
+    try {
+      const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/booking`, {
+        method: "POST",
+        headers: { "Content-Type": "Application/json" },
+        body: JSON.stringify({
+          name: passengerName,
+          cnicNo: passengerCnic,
+          phoneNo: passengerPhone,
+          vehicleNo: selectedBus.vehicleNo,
+          transitDat: selectedBus.departure,
+          seatsBooked: selectedSeats,
+          ticketPrice: selectedBus.ticketPrice,
+          noOfSeatsBooked: selectedSeats.length,
+          totalAmount: selectedSeats.length * selectedBus.ticketPrice,
+          to: destination,
+          from: origin
+        })
+      })
+      const data = await res.json()
+      if (!data.success)
+        setToast({ message: data.err, type: "error" })
+    } catch (error) {
+      console.log(error)
+    }
+
+
   }
 
   const handleStepClick = (stepId) => {
@@ -475,7 +524,6 @@ export default function Booking() {
                     >
                       {seats.map((seat, index) => {
                         // Add aisle gap after 2nd column
-                        console.log(seat.status + (index + 1))
                         const col = index % 4
                         return (
                           <button
@@ -577,7 +625,7 @@ export default function Booking() {
                         <input
                           id='passenger-phone'
                           type='tel'
-                          placeholder='+92 3XX XXXXXXX'
+                          placeholder='03XXXXXXXXX'
                           value={passengerPhone}
                           onChange={(e) => setPassengerPhone(e.target.value)}
                           className='bg-surface-container-low border-outline-variant text-on-surface text-body-md focus:ring-primary/30 focus:border-primary placeholder:text-on-surface-variant/50 w-full rounded-xl border py-3 pr-4 pl-10 transition-all focus:ring-2 focus:outline-none'
@@ -607,18 +655,37 @@ export default function Booking() {
                         />
                       </div>
                     </div>
+
+                    {/* CNIC */}
+                    <div>
+                      <label
+                        htmlFor='passenger-cnic'
+                        className='text-label-md text-on-surface-variant mb-2 block'
+                      >
+                        CNIC Number <span className='text-body-sm text-on-surface-variant/50'>(Without Dashes)</span>
+                      </label>
+                      <div className='relative'>
+                        <span className='material-symbols-outlined text-on-surface-variant absolute top-1/2 left-3 -translate-y-1/2 text-[20px]'>
+                          id_card
+                        </span>
+                        <input
+                          id='passenger-cnic'
+                          type='text'
+                          placeholder='XXXXXXXXXXXXX'
+                          value={passengerCnic}
+                          onChange={(e) => setPassengerCnic(e.target.value)}
+                          className='bg-surface-container-low border-outline-variant text-on-surface text-body-md focus:ring-primary/30 focus:border-primary placeholder:text-on-surface-variant/50 w-full rounded-xl border py-3 pr-4 pl-10 transition-all focus:ring-2 focus:outline-none'
+                        />
+                      </div>
+                    </div>
                   </div>
 
                   {/* Confirm Button */}
                   <button
                     id='confirm-booking-btn'
                     onClick={handleConfirmBooking}
-                    disabled={
-                      !passengerName || !passengerPhone || !passengerEmail
-                    }
-                    className={`mt-xl text-label-md flex w-full cursor-pointer items-center justify-center gap-2 rounded-xl py-3.5 font-bold transition-all ${passengerName && passengerPhone && passengerEmail
-                      ? "bg-secondary text-on-secondary hover:bg-secondary-container shadow-md active:scale-[0.98]"
-                      : "bg-surface-variant text-on-surface-variant cursor-not-allowed opacity-60"
+                    className={`mt-xl text-label-md flex w-full items-center justify-center gap-2 rounded-xl py-3.5 font-bold transition-all ${"bg-secondary text-on-secondary hover:bg-secondary-container shadow-md active:scale-[0.98] cursor-pointer"
+
                       }`}
                   >
                     <span className='material-symbols-outlined text-[20px]'>
@@ -739,7 +806,7 @@ export default function Booking() {
                               {selectedBus.name}
                             </p>
                             <p className='text-label-sm text-on-surface-variant'>
-                              {selectedBus.departure} · {selectedBus.busClass}
+                              {selectedBus.vehicleNumber}
                             </p>
                           </div>
                         </div>
