@@ -148,26 +148,15 @@ export default function Booking() {
       setToast({ message: "Please enter your CNIC", type: "error" });
       return
     }
-
-    // console.log("name = " + passengerName)
-    // console.log("cnic = " + passengerCnic)
-    // console.log("phoneNo = " + passengerPhone)
-    // console.log("vehicleNo = " + selectedBus.vehicleNumber)
-    // console.log("transitDat = " + selectedBus.departure)
-    // console.log("ticketPrice = " + selectedBus.ticketPrice)
-    // console.log("to = " + selectedBus.to)
-    // console.log("from = " + selectedBus.from)
-    // console.log("noOfSeats = " + selectedSeats.length)
-    // console.log("Total Amount = ", (selectedSeats.length * selectedBus.ticketPrice))
     try {
       const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/booking`, {
         method: "POST",
         headers: { "Content-Type": "Application/json" },
         body: JSON.stringify({
+          vehicleNo: selectedBus.vehicleNumber,
           name: passengerName,
           cnicNo: passengerCnic,
           phoneNo: passengerPhone,
-          vehicleNo: selectedBus.vehicleNo,
           transitDat: selectedBus.departure,
           seatsBooked: selectedSeats,
           ticketPrice: selectedBus.ticketPrice,
@@ -178,8 +167,11 @@ export default function Booking() {
         })
       })
       const data = await res.json()
-      if (!data.success)
+      if (!data.success) {
         setToast({ message: data.err, type: "error" })
+        throw new Error(data.err)
+      }
+      setBookingConfirmed(true)
     } catch (error) {
       console.log(error)
     }
@@ -235,10 +227,11 @@ export default function Booking() {
             {STEPS.map((step, index) => (
               <div key={step.id} className='flex items-center gap-2 md:gap-4'>
                 <button
+                  disabled={bookingConfirmed}
                   id={`step-${step.id}`}
                   onClick={() => handleStepClick(step.id)}
                   className={`flex cursor-pointer items-center gap-2 transition-all duration-200 ${step.id <= currentStep ? "opacity-100" : "opacity-50"
-                    }`}
+                    } ${bookingConfirmed ? "cursor-not-allowed" : ""}`}
                 >
                   <span
                     className={`text-label-md flex h-9 w-9 items-center justify-center rounded-full font-bold transition-colors duration-200 ${step.id === currentStep
@@ -722,7 +715,7 @@ export default function Booking() {
                       </span>
                       <span className='text-on-surface-variant'>Bus</span>
                       <span className='text-on-surface font-semibold'>
-                        {selectedBus?.name}
+                        {selectedBus?.vehicleNumber}
                       </span>
                       <span className='text-on-surface-variant'>Seats</span>
                       <span className='text-on-surface font-semibold'>
@@ -733,11 +726,23 @@ export default function Booking() {
                         {passengerName}
                       </span>
                       <span className='text-on-surface-variant'>Total</span>
-                      <span className='text-secondary font-bold'>
-                        Rs. {totalPrice.toLocaleString()}
+                      <span className='text-green-700 font-bold'>
+                        Rs. {(selectedSeats.length * selectedBus.ticketPrice).toLocaleString()}
                       </span>
                     </div>
                   </div>
+
+                  {/* Done Button */}
+                  <button
+                    id='done-btn'
+                    onClick={() => window.location.reload()}
+                    className='mt-lg text-label-md flex cursor-pointer items-center justify-center gap-2 rounded-xl bg-green-600 text-white px-8 py-2.5 font-bold shadow-md transition-all hover:bg-green-700 active:scale-[0.98] mx-auto'
+                  >
+                    <span className='material-symbols-outlined text-[20px]'>
+                      done_all
+                    </span>
+                    Done
+                  </button>
                 </div>
               )}
             </div>
@@ -844,8 +849,8 @@ export default function Booking() {
                             </span>
                             <span className='text-headline-lg text-primary font-bold'>
                               {selectedSeats.length > 0
-                                ? `Rs. ${selectedSeats.length * selectedBus.ticketPrice}`
-                                : `Rs. ${selectedBus.ticketPrice}`}
+                                ? `Rs. ${(selectedSeats.length * selectedBus.ticketPrice).toLocaleString()}`
+                                : `Rs. ${(selectedBus.ticketPrice).toLocaleString()}`}
                             </span>
                           </div>
                         </div>
