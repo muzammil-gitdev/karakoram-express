@@ -365,6 +365,7 @@ export default function Booking() {
                       <input
                         type='date'
                         min={minDate}
+                        onClick={(e) => e.currentTarget.showPicker()}
                         className='px-md border-outline-variant bg-surface-container-low text-on-surface text-body-md focus:border-primary h-12 w-full rounded-lg border focus:outline-none'
                         onChange={(e) => { setSelectedDate(e.target.value) }}
                       />
