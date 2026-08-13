@@ -56,7 +56,7 @@ export default function Footer() {
             Pakistan.
           </p>
           <a
-            href='/portal'
+            href='/portal/login'
             className='text-label-sm text-surface-variant/60 hover:text-secondary-fixed-dim flex items-center gap-1.5 transition-colors'
           >
             <span className='material-symbols-outlined text-[16px]'>

@@ -74,7 +74,8 @@ export default function Booking() {
   const [bookingConfirmed, setBookingConfirmed] = useState(false);
   const [loadingBus, setLoadingBus] = useState(false);
   const [toast, setToast] = useState(null);
-
+  const today = new Date(Date.now());
+  const minDate = today.toISOString().split("T")[0];
 
   const handleSwap = () => {
     setOrigin(destination)
@@ -363,6 +364,7 @@ export default function Booking() {
                       </label>
                       <input
                         type='date'
+                        min={minDate}
                         className='px-md border-outline-variant bg-surface-container-low text-on-surface text-body-md focus:border-primary h-12 w-full rounded-lg border focus:outline-none'
                         onChange={(e) => { setSelectedDate(e.target.value) }}
                       />

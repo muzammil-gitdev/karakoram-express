@@ -1,4 +1,4 @@
-import { NavLink, Outlet } from "react-router-dom"
+import { NavLink, Outlet, replace, useNavigate } from "react-router-dom"
 import { useState } from "react"
 
 const sidebarLinks = [
@@ -19,6 +19,7 @@ const sidebarLinks = [
 
 export default function PortalLayout() {
   const [sidebarOpen, setSidebarOpen] = useState(false)
+  const navigate = useNavigate()
 
   return (
     <div className='flex h-screen overflow-hidden'>
@@ -32,9 +33,8 @@ export default function PortalLayout() {
 
       {/* Sidebar */}
       <aside
-        className={`portal-sidebar bg-primary fixed z-50 flex h-full w-[260px] flex-col transition-transform duration-300 md:relative md:translate-x-0 ${
-          sidebarOpen ? "translate-x-0" : "-translate-x-full"
-        }`}
+        className={`portal-sidebar bg-primary fixed z-50 flex h-full w-[260px] flex-col transition-transform duration-300 md:relative md:translate-x-0 ${sidebarOpen ? "translate-x-0" : "-translate-x-full"
+          }`}
       >
         {/* Brand */}
         <div className='border-on-primary/10 flex items-center gap-3 border-b px-6 py-5'>
@@ -63,10 +63,9 @@ export default function PortalLayout() {
               end={link.end}
               onClick={() => setSidebarOpen(false)}
               className={({ isActive }) =>
-                `flex items-center gap-3 rounded-xl px-4 py-2.5 text-sm font-medium transition-all duration-200 ${
-                  isActive
-                    ? "bg-secondary text-on-secondary shadow-sm"
-                    : "text-on-primary/70 hover:bg-primary-container hover:text-on-primary"
+                `flex items-center gap-3 rounded-xl px-4 py-2.5 text-sm font-medium transition-all duration-200 ${isActive
+                  ? "bg-secondary text-on-secondary shadow-sm"
+                  : "text-on-primary/70 hover:bg-primary-container hover:text-on-primary"
                 }`
               }
             >
@@ -78,24 +77,24 @@ export default function PortalLayout() {
           ))}
         </nav>
 
-        {/* Back to website */}
+        {/* Logout */}
         <div className='border-on-primary/10 border-t px-3 py-4'>
-          <NavLink
-            to='/'
-            className='text-on-primary/60 hover:text-secondary-fixed-dim flex items-center gap-3 rounded-xl px-4 py-2.5 text-sm transition-colors'
+          <button
+            onClick={() => navigate('/portal/login', { replace: true })}
+            className='text-on-primary/60 hover:text-secondary-fixed-dim flex w-full items-center gap-3 rounded-xl px-4 py-2.5 text-sm transition-colors cursor-pointer'
           >
             <span className='material-symbols-outlined text-[20px]'>
-              arrow_back
+              logout
             </span>
-            Back to Website
-          </NavLink>
+            Logout
+          </button>
         </div>
-      </aside>
+      </aside >
 
       {/* Main Content */}
-      <div className='flex flex-1 flex-col overflow-hidden'>
+      < div className='flex flex-1 flex-col overflow-hidden' >
         {/* Top Bar */}
-        <header className='bg-surface-container-lowest border-outline-variant/30 flex items-center gap-4 border-b px-6 py-3.5'>
+        < header className='bg-surface-container-lowest border-outline-variant/30 flex items-center gap-4 border-b px-6 py-3.5' >
           <button
             className='text-primary cursor-pointer md:hidden'
             onClick={() => setSidebarOpen(true)}
@@ -110,13 +109,13 @@ export default function PortalLayout() {
               Admin Portal
             </span>
           </div>
-        </header>
+        </header >
 
         {/* Scrollable Page Content */}
-        <main className='bg-surface-container-low flex-1 overflow-y-auto'>
+        < main className='bg-surface-container-low flex-1 overflow-y-auto' >
           <Outlet />
-        </main>
-      </div>
-    </div>
+        </main >
+      </div >
+    </div >
   )
 }

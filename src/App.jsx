@@ -7,6 +7,7 @@ import Offices from "../pages/Offices"
 import Booking from "../pages/Booking"
 import AppLayout from "../pages/AppLayout"
 import PortalLayout from "../components/portal/PortalLayout"
+import PortalLogin from "../pages/portal/PortalLogin"
 import PortalDashboard from "../pages/portal/PortalDashboard"
 import PortalFeaturedRoutes from "../pages/portal/PortalFeaturedRoutes"
 import PortalTransitRoutes from "../pages/portal/PortalTransitRoutes"
@@ -25,6 +26,7 @@ function App() {
         </Route>
 
         {/* Admin Portal */}
+        <Route path='portal/login' element={<PortalLogin />} />
         <Route path='portal' element={<PortalLayout />}>
           <Route index element={<PortalDashboard />} />
           <Route path='featured-routes' element={<PortalFeaturedRoutes />} />
