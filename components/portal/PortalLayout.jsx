@@ -15,6 +15,12 @@ const sidebarLinks = [
     icon: "directions_bus",
     end: false,
   },
+  {
+    to: "/portal/passengers",
+    label: "Passengers",
+    icon: "groups",
+    end: false,
+  },
 ]
 
 export default function PortalLayout() {

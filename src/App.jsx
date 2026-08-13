@@ -11,6 +11,7 @@ import PortalLogin from "../pages/portal/PortalLogin"
 import PortalDashboard from "../pages/portal/PortalDashboard"
 import PortalFeaturedRoutes from "../pages/portal/PortalFeaturedRoutes"
 import PortalTransitRoutes from "../pages/portal/PortalTransitRoutes"
+import PortalPassengers from "../pages/portal/PortalPassengers"
 
 function App() {
   return (
@@ -31,6 +32,7 @@ function App() {
           <Route index element={<PortalDashboard />} />
           <Route path='featured-routes' element={<PortalFeaturedRoutes />} />
           <Route path='transit-routes' element={<PortalTransitRoutes />} />
+          <Route path='passengers' element={<PortalPassengers />} />
         </Route>
       </Routes>
     </BrowserRouter>
