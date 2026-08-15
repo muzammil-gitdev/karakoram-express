@@ -49,7 +49,7 @@ export default function PortalPassengers() {
     try {
 
       const convDat = new Date(date)
-      const res = await fetch(`${BACKEND}/api/passengers/getPassengers?from=${from}&to=${to}&vehicleNo=${vehicleNumber}`)
+      const res = await fetch(`${BACKEND}/api/passengers/getPassengers?from=${from}&to=${to}&vehicleNo=${vehicleNumber}&transitDat=${convDat.toISOString()}`)
       const data = await res.json()
       console.log(data);
 
@@ -230,7 +230,21 @@ export default function PortalPassengers() {
       </div>
 
       {/* Results Section */}
-      {searched && (
+      {searched && (() => {
+        // Flatten passengers into one entry per seat, sorted by seat number
+        const seatEntries = passengers
+          .flatMap((passenger) =>
+            (passenger.seatsBooked || []).map((seat) => ({
+              seat: Number(seat),
+              name: passenger.name,
+              cnicNo: passenger.cnicNo,
+              phoneNo: passenger.phoneNo,
+              _id: passenger._id,
+            }))
+          )
+          .sort((a, b) => a.seat - b.seat)
+
+        return (
         <div>
           {/* Results Header */}
           <div className='mb-md flex items-center justify-between'>
@@ -238,7 +252,7 @@ export default function PortalPassengers() {
               <span className='material-symbols-outlined text-primary text-[22px]'>
                 list
               </span>
-              Passenger List
+              Passenger Register
             </h2>
             <div className='flex items-center gap-2'>
               <span className='text-label-md bg-primary-container text-on-primary-container rounded-lg px-3 py-1'>
@@ -258,19 +272,27 @@ export default function PortalPassengers() {
           </div>
 
           {/* Results Count Badge */}
-          <div className='mb-md'>
+          <div className='mb-md flex flex-wrap gap-2'>
             <span
-              className={`text-label-md inline-flex items-center gap-1.5 rounded-full px-3 py-1 font-medium ${passengers.length > 0
+              className={`text-label-md inline-flex items-center gap-1.5 rounded-full px-3 py-1 font-medium ${seatEntries.length > 0
                 ? "bg-green-100 text-green-800"
                 : "bg-surface-variant text-on-surface-variant"
                 }`}
             >
               <span className='material-symbols-outlined text-[16px]'>
-                {passengers.length > 0 ? "check_circle" : "info"}
+                {seatEntries.length > 0 ? "check_circle" : "info"}
               </span>
-              {passengers.length} passenger{passengers.length !== 1 ? "s" : ""}{" "}
-              found
+              {seatEntries.length} seat{seatEntries.length !== 1 ? "s" : ""}{" "}
+              booked
             </span>
+            {passengers.length > 0 && (
+              <span className='text-label-md inline-flex items-center gap-1.5 rounded-full bg-blue-100 px-3 py-1 font-medium text-blue-800'>
+                <span className='material-symbols-outlined text-[16px]'>
+                  groups
+                </span>
+                {passengers.length} passenger{passengers.length !== 1 ? "s" : ""}
+              </span>
+            )}
           </div>
 
           {loading ? (
@@ -282,7 +304,7 @@ export default function PortalPassengers() {
                 Fetching passengers…
               </p>
             </div>
-          ) : passengers.length === 0 ? (
+          ) : seatEntries.length === 0 ? (
             <div className='bg-surface-container-lowest card-shadow py-xl flex flex-col items-center justify-center rounded-2xl'>
               <span className='material-symbols-outlined text-outline-variant text-[56px]'>
                 person_off
@@ -317,9 +339,9 @@ export default function PortalPassengers() {
                   </tr>
                 </thead>
                 <tbody>
-                  {passengers.map((passenger, idx) => (
+                  {seatEntries.map((entry, idx) => (
                     <tr
-                      key={passenger._id || idx}
+                      key={`${entry._id}-seat-${entry.seat}`}
                       className={`border-outline-variant/20 hover:bg-primary-fixed/5 border-b transition-colors last:border-b-0 ${idx % 2 === 0
                         ? "bg-surface-container-lowest"
                         : "bg-surface-container-low/40"
@@ -329,16 +351,9 @@ export default function PortalPassengers() {
                         {idx + 1}
                       </td>
                       <td className='px-5 py-3.5'>
-                        <div className='flex flex-wrap gap-1.5'>
-                          {(passenger.seatsBooked || []).map((seat) => (
-                            <span
-                              key={seat}
-                              className='text-label-md bg-primary-container text-on-primary-container inline-flex h-7 w-7 items-center justify-center rounded-lg font-bold'
-                            >
-                              {seat}
-                            </span>
-                          ))}
-                        </div>
+                        <span className='text-label-md bg-primary-container text-on-primary-container inline-flex h-7 w-7 items-center justify-center rounded-lg font-bold'>
+                          {entry.seat}
+                        </span>
                       </td>
                       <td className='px-5 py-3.5'>
                         <div className='flex items-center gap-2'>
@@ -348,12 +363,12 @@ export default function PortalPassengers() {
                             </span>
                           </div>
                           <span className='text-body-md text-on-surface font-semibold'>
-                            {passenger.name}
+                            {entry.name}
                           </span>
                         </div>
                       </td>
                       <td className='text-body-md text-on-surface px-5 py-3.5 font-mono'>
-                        {passenger.cnicNo || "—"}
+                        {entry.cnicNo || "—"}
                       </td>
                       <td className='px-5 py-3.5'>
                         <div className='flex items-center gap-1.5'>
@@ -361,7 +376,7 @@ export default function PortalPassengers() {
                             phone
                           </span>
                           <span className='text-body-md text-on-surface'>
-                            {passenger.phoneNo || "—"}
+                            {entry.phoneNo || "—"}
                           </span>
                         </div>
                       </td>
@@ -376,17 +391,14 @@ export default function PortalPassengers() {
                   Total Passengers: {passengers.length}
                 </span>
                 <span className='text-label-sm text-on-surface-variant'>
-                  Total Seats Booked:{" "}
-                  {passengers.reduce(
-                    (sum, p) => sum + (p.seatsBooked?.length || 0),
-                    0
-                  )}
+                  Total Seats Booked: {seatEntries.length}
                 </span>
               </div>
             </div>
           )}
         </div>
-      )}
+        )
+      })()}
     </div>
   )
 }
