@@ -322,9 +322,6 @@ export default function PortalPassengers() {
                 <thead>
                   <tr className='border-outline-variant/40 border-b'>
                     <th className='text-label-md text-on-surface-variant px-5 py-3.5 font-semibold'>
-                      #
-                    </th>
-                    <th className='text-label-md text-on-surface-variant px-5 py-3.5 font-semibold'>
                       Seat No.
                     </th>
                     <th className='text-label-md text-on-surface-variant px-5 py-3.5 font-semibold'>
@@ -347,13 +344,8 @@ export default function PortalPassengers() {
                         : "bg-surface-container-low/40"
                         }`}
                     >
-                      <td className='text-body-md text-on-surface-variant px-5 py-3.5'>
-                        {idx + 1}
-                      </td>
-                      <td className='px-5 py-3.5'>
-                        <span className='text-label-md bg-primary-container text-on-primary-container inline-flex h-7 w-7 items-center justify-center rounded-lg font-bold'>
-                          {entry.seat}
-                        </span>
+                      <td className='text-body-md text-on-surface px-5 py-3.5 font-semibold'>
+                        {entry.seat}
                       </td>
                       <td className='px-5 py-3.5'>
                         <div className='flex items-center gap-2'>
