@@ -47,24 +47,14 @@ export default function PortalPassengers() {
     setPassengers([])
 
     try {
-      const startOfDay = new Date(date)
-      startOfDay.setUTCHours(0, 0, 0, 0)
-      const endOfDay = new Date(date)
-      endOfDay.setUTCHours(23, 59, 59, 999)
 
-      const params = new URLSearchParams({
-        from,
-        to,
-        vehicleNo: vehicleNumber,
-        start: startOfDay.toISOString(),
-        end: endOfDay.toISOString(),
-      })
-
-      const res = await fetch(`${BACKEND}/api/booking?${params.toString()}`)
+      const convDat = new Date(date)
+      const res = await fetch(`${BACKEND}/api/passengers/getPassengers?from=${from}&to=${to}&vehicleNo=${vehicleNumber}`)
       const data = await res.json()
+      console.log(data);
 
       if (data.success) {
-        setPassengers(data.data || [])
+        setPassengers(data.passenger || [])
       } else {
         setToast({
           message: data.message || "Failed to fetch passengers.",
@@ -73,7 +63,7 @@ export default function PortalPassengers() {
       }
     } catch (err) {
       setToast({
-        message: "Network error. Is the backend running?",
+        message: err.message,
         type: "error",
       })
     } finally {
@@ -270,11 +260,10 @@ export default function PortalPassengers() {
           {/* Results Count Badge */}
           <div className='mb-md'>
             <span
-              className={`text-label-md inline-flex items-center gap-1.5 rounded-full px-3 py-1 font-medium ${
-                passengers.length > 0
-                  ? "bg-green-100 text-green-800"
-                  : "bg-surface-variant text-on-surface-variant"
-              }`}
+              className={`text-label-md inline-flex items-center gap-1.5 rounded-full px-3 py-1 font-medium ${passengers.length > 0
+                ? "bg-green-100 text-green-800"
+                : "bg-surface-variant text-on-surface-variant"
+                }`}
             >
               <span className='material-symbols-outlined text-[16px]'>
                 {passengers.length > 0 ? "check_circle" : "info"}
@@ -331,11 +320,10 @@ export default function PortalPassengers() {
                   {passengers.map((passenger, idx) => (
                     <tr
                       key={passenger._id || idx}
-                      className={`border-outline-variant/20 hover:bg-primary-fixed/5 border-b transition-colors last:border-b-0 ${
-                        idx % 2 === 0
-                          ? "bg-surface-container-lowest"
-                          : "bg-surface-container-low/40"
-                      }`}
+                      className={`border-outline-variant/20 hover:bg-primary-fixed/5 border-b transition-colors last:border-b-0 ${idx % 2 === 0
+                        ? "bg-surface-container-lowest"
+                        : "bg-surface-container-low/40"
+                        }`}
                     >
                       <td className='text-body-md text-on-surface-variant px-5 py-3.5'>
                         {idx + 1}
