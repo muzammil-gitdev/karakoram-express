@@ -347,17 +347,8 @@ export default function PortalPassengers() {
                       <td className='text-body-md text-on-surface px-5 py-3.5 font-semibold'>
                         {entry.seat}
                       </td>
-                      <td className='px-5 py-3.5'>
-                        <div className='flex items-center gap-2'>
-                          <div className='bg-primary/10 flex h-8 w-8 items-center justify-center rounded-full'>
-                            <span className='material-symbols-outlined text-primary text-[16px]'>
-                              person
-                            </span>
-                          </div>
-                          <span className='text-body-md text-on-surface font-semibold'>
-                            {entry.name}
-                          </span>
-                        </div>
+                      <td className='text-body-md text-on-surface px-5 py-3.5 font-semibold'>
+                        {entry.name}
                       </td>
                       <td className='text-body-md text-on-surface px-5 py-3.5 font-mono'>
                         {entry.cnicNo || "—"}
