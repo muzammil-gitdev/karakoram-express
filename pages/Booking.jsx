@@ -729,7 +729,7 @@ export default function Booking() {
                         {passengerName}
                       </span>
                       <span className='text-on-surface-variant'>Total</span>
-                      <span className='text-green-700 font-bold'>
+                      <span className='text-green-700 dark:text-green-400 font-bold'>
                         Rs. {(selectedSeats.length * selectedBus.ticketPrice).toLocaleString()}
                       </span>
                     </div>
@@ -739,7 +739,7 @@ export default function Booking() {
                   <button
                     id='done-btn'
                     onClick={() => window.location.reload()}
-                    className='mt-lg text-label-md flex cursor-pointer items-center justify-center gap-2 rounded-xl bg-green-600 text-white px-8 py-2.5 font-bold shadow-md transition-all hover:bg-green-700 active:scale-[0.98] mx-auto'
+                    className='mt-lg text-label-md flex cursor-pointer items-center justify-center gap-2 rounded-xl bg-green-600 dark:bg-green-700 text-white px-8 py-2.5 font-bold shadow-md transition-all hover:bg-green-700 dark:hover:bg-green-600 active:scale-[0.98] mx-auto'
                   >
                     <span className='material-symbols-outlined text-[20px]'>
                       done_all

@@ -243,143 +243,144 @@ export default function PortalPassengers() {
             }))
           )
           .sort((a, b) => a.seat - b.seat)
+        console.log(seatEntries);
 
         return (
-        <div>
-          {/* Results Header */}
-          <div className='mb-md flex items-center justify-between'>
-            <h2 className='text-headline-lg-mobile text-on-surface flex items-center gap-2'>
-              <span className='material-symbols-outlined text-primary text-[22px]'>
-                list
-              </span>
-              Passenger Register
-            </h2>
-            <div className='flex items-center gap-2'>
-              <span className='text-label-md bg-primary-container text-on-primary-container rounded-lg px-3 py-1'>
-                {vehicleNumber}
-              </span>
-              <span className='text-label-md text-on-surface-variant'>
-                {from} → {to}
-              </span>
-              <span className='text-label-sm text-on-surface-variant/70'>
-                · {new Date(date).toLocaleDateString("en-PK", {
-                  day: "2-digit",
-                  month: "short",
-                  year: "numeric",
-                })}
-              </span>
-            </div>
-          </div>
-
-          {/* Results Count Badge */}
-          <div className='mb-md flex flex-wrap gap-2'>
-            <span
-              className={`text-label-md inline-flex items-center gap-1.5 rounded-full px-3 py-1 font-medium ${seatEntries.length > 0
-                ? "bg-green-100 text-green-800"
-                : "bg-surface-variant text-on-surface-variant"
-                }`}
-            >
-              <span className='material-symbols-outlined text-[16px]'>
-                {seatEntries.length > 0 ? "check_circle" : "info"}
-              </span>
-              {seatEntries.length} seat{seatEntries.length !== 1 ? "s" : ""}{" "}
-              booked
-            </span>
-            {passengers.length > 0 && (
-              <span className='text-label-md inline-flex items-center gap-1.5 rounded-full bg-blue-100 px-3 py-1 font-medium text-blue-800'>
-                <span className='material-symbols-outlined text-[16px]'>
-                  groups
+          <div>
+            {/* Results Header */}
+            <div className='mb-md flex items-center justify-between'>
+              <h2 className='text-headline-lg-mobile text-on-surface flex items-center gap-2'>
+                <span className='material-symbols-outlined text-primary text-[22px]'>
+                  list
                 </span>
-                {passengers.length} passenger{passengers.length !== 1 ? "s" : ""}
-              </span>
-            )}
-          </div>
-
-          {loading ? (
-            <div className='py-xl flex flex-col items-center justify-center'>
-              <span className='material-symbols-outlined text-outline-variant animate-spin text-[40px]'>
-                progress_activity
-              </span>
-              <p className='text-body-md text-on-surface-variant mt-3'>
-                Fetching passengers…
-              </p>
-            </div>
-          ) : seatEntries.length === 0 ? (
-            <div className='bg-surface-container-lowest card-shadow py-xl flex flex-col items-center justify-center rounded-2xl'>
-              <span className='material-symbols-outlined text-outline-variant text-[56px]'>
-                person_off
-              </span>
-              <p className='text-body-md text-on-surface-variant mt-3'>
-                No passengers found for this bus on the selected date.
-              </p>
-              <p className='text-label-sm text-on-surface-variant/60 mt-1'>
-                Check the vehicle number, route, and date and try again.
-              </p>
-            </div>
-          ) : (
-            <div className='bg-surface-container-lowest card-shadow overflow-x-auto rounded-2xl'>
-              <table className='portal-table w-full min-w-[700px] text-left'>
-                <thead>
-                  <tr className='border-outline-variant/40 border-b'>
-                    <th className='text-label-md text-on-surface-variant px-5 py-3.5 font-semibold'>
-                      Seat No.
-                    </th>
-                    <th className='text-label-md text-on-surface-variant px-5 py-3.5 font-semibold'>
-                      Passenger Name
-                    </th>
-                    <th className='text-label-md text-on-surface-variant px-5 py-3.5 font-semibold'>
-                      CNIC
-                    </th>
-                    <th className='text-label-md text-on-surface-variant px-5 py-3.5 font-semibold'>
-                      Phone Number
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {seatEntries.map((entry, idx) => (
-                    <tr
-                      key={`${entry._id}-seat-${entry.seat}`}
-                      className={`border-outline-variant/20 hover:bg-primary-fixed/5 border-b transition-colors last:border-b-0 ${idx % 2 === 0
-                        ? "bg-surface-container-lowest"
-                        : "bg-surface-container-low/40"
-                        }`}
-                    >
-                      <td className='text-body-md text-on-surface px-5 py-3.5 font-semibold'>
-                        {entry.seat}
-                      </td>
-                      <td className='text-body-md text-on-surface px-5 py-3.5 font-semibold'>
-                        {entry.name}
-                      </td>
-                      <td className='text-body-md text-on-surface px-5 py-3.5 font-mono'>
-                        {entry.cnicNo || "—"}
-                      </td>
-                      <td className='px-5 py-3.5'>
-                        <div className='flex items-center gap-1.5'>
-                          <span className='material-symbols-outlined text-on-surface-variant text-[16px]'>
-                            phone
-                          </span>
-                          <span className='text-body-md text-on-surface'>
-                            {entry.phoneNo || "—"}
-                          </span>
-                        </div>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-
-              {/* Summary Footer */}
-              <div className='border-outline-variant/40 flex items-center justify-between border-t px-5 py-3'>
-                <span className='text-label-sm text-on-surface-variant'>
-                  Total Passengers: {passengers.length}
+                Passenger Register
+              </h2>
+              <div className='flex items-center gap-2'>
+                <span className='text-label-md bg-primary-container text-on-primary-container rounded-lg px-3 py-1'>
+                  {vehicleNumber}
                 </span>
-                <span className='text-label-sm text-on-surface-variant'>
-                  Total Seats Booked: {seatEntries.length}
+                <span className='text-label-md text-on-surface-variant'>
+                  {from} → {to}
+                </span>
+                <span className='text-label-sm text-on-surface-variant/70'>
+                  · {new Date(date).toLocaleDateString("en-PK", {
+                    day: "2-digit",
+                    month: "short",
+                    year: "numeric",
+                  })}
                 </span>
               </div>
             </div>
-          )}
-        </div>
+
+            {/* Results Count Badge */}
+            <div className='mb-md flex flex-wrap gap-2'>
+              <span
+                className={`text-label-md inline-flex items-center gap-1.5 rounded-full px-3 py-1 font-medium ${seatEntries.length > 0
+                  ? "bg-green-100 text-green-800"
+                  : "bg-surface-variant text-on-surface-variant"
+                  }`}
+              >
+                <span className='material-symbols-outlined text-[16px]'>
+                  {seatEntries.length > 0 ? "check_circle" : "info"}
+                </span>
+                {seatEntries.length} seat{seatEntries.length !== 1 ? "s" : ""}{" "}
+                booked
+              </span>
+              {passengers.length > 0 && (
+                <span className='text-label-md inline-flex items-center gap-1.5 rounded-full bg-blue-100 px-3 py-1 font-medium text-blue-800'>
+                  <span className='material-symbols-outlined text-[16px]'>
+                    groups
+                  </span>
+                  {passengers.length} passenger{passengers.length !== 1 ? "s" : ""}
+                </span>
+              )}
+            </div>
+
+            {loading ? (
+              <div className='py-xl flex flex-col items-center justify-center'>
+                <span className='material-symbols-outlined text-outline-variant animate-spin text-[40px]'>
+                  progress_activity
+                </span>
+                <p className='text-body-md text-on-surface-variant mt-3'>
+                  Fetching passengers…
+                </p>
+              </div>
+            ) : seatEntries.length === 0 ? (
+              <div className='bg-surface-container-lowest card-shadow py-xl flex flex-col items-center justify-center rounded-2xl'>
+                <span className='material-symbols-outlined text-outline-variant text-[56px]'>
+                  person_off
+                </span>
+                <p className='text-body-md text-on-surface-variant mt-3'>
+                  No passengers found for this bus on the selected date.
+                </p>
+                <p className='text-label-sm text-on-surface-variant/60 mt-1'>
+                  Check the vehicle number, route, and date and try again.
+                </p>
+              </div>
+            ) : (
+              <div className='bg-surface-container-lowest card-shadow overflow-x-auto rounded-2xl'>
+                <table className='portal-table w-full min-w-[700px] text-left'>
+                  <thead>
+                    <tr className='border-outline-variant/40 border-b'>
+                      <th className='text-label-md text-on-surface-variant px-5 py-3.5 font-semibold'>
+                        Seat No.
+                      </th>
+                      <th className='text-label-md text-on-surface-variant px-5 py-3.5 font-semibold'>
+                        Passenger Name
+                      </th>
+                      <th className='text-label-md text-on-surface-variant px-5 py-3.5 font-semibold'>
+                        CNIC
+                      </th>
+                      <th className='text-label-md text-on-surface-variant px-5 py-3.5 font-semibold'>
+                        Phone Number
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {seatEntries.map((entry, idx) => (
+                      <tr
+                        key={`${entry._id}-seat-${entry.seat}`}
+                        className={`border-outline-variant/20 hover:bg-primary-fixed/5 border-b transition-colors last:border-b-0 ${idx % 2 === 0
+                          ? "bg-surface-container-lowest"
+                          : "bg-surface-container-low/40"
+                          }`}
+                      >
+                        <td className='text-body-md text-on-surface px-5 py-3.5 font-semibold'>
+                          {entry.seat}
+                        </td>
+                        <td className='text-body-md text-on-surface px-5 py-3.5 font-semibold'>
+                          {entry.name}
+                        </td>
+                        <td className='text-body-md text-on-surface px-5 py-3.5 font-mono'>
+                          {entry.cnicNo || "—"}
+                        </td>
+                        <td className='px-5 py-3.5'>
+                          <div className='flex items-center gap-1.5'>
+                            <span className='material-symbols-outlined text-on-surface-variant text-[16px]'>
+                              phone
+                            </span>
+                            <span className='text-body-md text-on-surface'>
+                              {entry.phoneNo || "—"}
+                            </span>
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+
+                {/* Summary Footer */}
+                <div className='border-outline-variant/40 flex items-center justify-between border-t px-5 py-3'>
+                  <span className='text-label-sm text-on-surface-variant'>
+                    Total Passengers: {passengers.length}
+                  </span>
+                  <span className='text-label-sm text-on-surface-variant'>
+                    Total Seats Booked: {seatEntries.length}
+                  </span>
+                </div>
+              </div>
+            )}
+          </div>
         )
       })()}
     </div>
