@@ -150,7 +150,7 @@ export default function Booking() {
       return
     }
     try {
-      const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/booking`, {
+      const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/payment`, {
         method: "POST",
         headers: { "Content-Type": "Application/json" },
         body: JSON.stringify({
@@ -172,7 +172,7 @@ export default function Booking() {
         setToast({ message: data.err, type: "error" })
         throw new Error(data.err)
       }
-      setBookingConfirmed(true)
+      // setBookingConfirmed(true)
     } catch (error) {
       console.log(error)
     }
@@ -687,7 +687,7 @@ export default function Booking() {
                     <span className='material-symbols-outlined text-[20px]'>
                       check_circle
                     </span>
-                    Confirm Booking
+                    Go to Checkout
                   </button>
                 </div>
               )}
