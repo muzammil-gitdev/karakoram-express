@@ -167,7 +167,9 @@ export default function Booking() {
           from: origin
         })
       })
-      const data = await res.json()
+      const data = await res.json();
+      console.log(data);
+      window.location = data.url;
       if (!data.success) {
         setToast({ message: data.err, type: "error" })
         throw new Error(data.err)
