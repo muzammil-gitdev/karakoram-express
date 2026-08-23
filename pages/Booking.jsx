@@ -132,23 +132,23 @@ export default function Booking() {
   }
 
   const handleConfirmBooking = async () => {
-    // const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    // if (!passengerName) {
-    //   setToast({ message: "Please enter your name", type: "error" });
-    //   return
-    // }
-    // if (!passengerPhone || passengerPhone.length !== 11) {
-    //   setToast({ message: "Enter Correct Mobile Number", type: "error" });
-    //   return
-    // }
-    // if (!passengerEmail || !emailRegex.test(passengerEmail)) {
-    //   setToast({ message: "Please enter your valid email", type: "error" });
-    //   return
-    // }
-    // if (!passengerCnic || passengerCnic.length !== 13) {
-    //   setToast({ message: "Please enter your CNIC", type: "error" });
-    //   return
-    // }
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!passengerName) {
+      setToast({ message: "Please enter your name", type: "error" });
+      return
+    }
+    if (!passengerPhone || passengerPhone.length !== 11) {
+      setToast({ message: "Enter Correct Mobile Number", type: "error" });
+      return
+    }
+    if (!passengerEmail || !emailRegex.test(passengerEmail)) {
+      setToast({ message: "Please enter your valid email", type: "error" });
+      return
+    }
+    if (!passengerCnic || passengerCnic.length !== 13) {
+      setToast({ message: "Please enter your CNIC", type: "error" });
+      return
+    }
     try {
       const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/payment`, {
         method: "POST",
